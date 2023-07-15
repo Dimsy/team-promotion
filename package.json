@@ -10,8 +10,6 @@
     "@mui/x-charts": "^6.0.0-alpha.3",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "@unovis/react": "^1.2.0",
-    "@unovis/ts": "^1.2.0",
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest",
@@ -34,5 +32,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
   }
 }

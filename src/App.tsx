@@ -18,6 +18,8 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CardContent from '@mui/material/CardContent';
+import { Button, CardActionArea, CardActions } from '@mui/material';
 
 import manpng from './static/gender-identity.png';
 
@@ -26,8 +28,9 @@ const data = [
     {
         name: '-',
         level: '11 грейд',
-        position: 'Senior Java разработчик/тех. лид',
+        position: 'Senior Java разработчик, тех. лид',
         company: 'Сбер',
+        city: 'Москва',
         skills: [
             'k8s',
             'openshift',
@@ -65,6 +68,7 @@ const data = [
         level: '10 грейд',
         position: 'Senior (low) Главный инженер по тестированию',
         company: 'Сбер',
+        city: 'Москва',
         skills: [
             'SQL',
             'oracle',
@@ -98,6 +102,7 @@ const data = [
         level: '',
         position: 'Senior Frontend developer, UI/UX лид',
         company: 'Корус',
+        city: 'Санкт-Петербург',
         skills: [
             'JavaScript',
             'TypeScript',
@@ -126,12 +131,13 @@ const data = [
             'ЕФС',
             'Монолит',
         ],
-        comments: 'Cамоорганизованность и организация других. Смежные области будь то дизайн или аналитика. Достаточно широкие знания во многих сферах, чуть бэк, чуть юай юикс, чуть аналитика. Ответственность за любой процесс и доведение процесса до результата. Склонность к планированию. Готов вписаться в любую активность.'
+        comments: 'Cамоорганизованность и организация других. Смежные области будь то дизайн или аналитика. Ментор для 3х начинающих frontend-разработчиков. Достаточно широкие знания во многих сферах, чуть бэк, чуть юай юикс, чуть аналитика. Ответственность за любой процесс и доведение процесса до результата. Склонность к планированию. Готов вписаться в любую активность.'
     },
     {
         name: '-',
         level: '',
         position: 'Middle Java разработчик',
+        city: 'Москва',
         company: 'Корус',
         skills: [
             'Java',
@@ -155,6 +161,7 @@ const data = [
         level: '9 грейд',
         position: 'Middle(low) Разработчик по тестированию',
         company: 'Сбер',
+        city: 'Москва',
         skills: [
             'JavaScript',
             'Black Box testing',
@@ -173,9 +180,74 @@ const data = [
         ],
         comments: 'Тестирование пользовательского пути. Работа с тестовой моделью. Тестовые прогоны. Ведение jira. Практический опыт работы по Agile (scrum /kanban)спринты 1-2 недели. Работа с дефектами. Обеспечение настроек организации на стендах ift/psi.'
     },
+    {
+        name: '-',
+        level: '9 грейд',
+        position: 'Инженер IT сопровождения/junior Devops',
+        company: 'Сбер',
+        city: 'Москва',
+        skills: [
+            'ЗНОопс',
+            'Работа в Service Manager',
+            'Настройка/Сопровождение тестовых стендов',
+            'Настройка/Сопровождение CI/CD pipeline',
+            'Устранение рисков',
+            'Администрирование Unix КТС',
+            'Сопровождение проектов OSE',
+            'Groovy',
+            'Ansible'
+        ],
+        specs: [
+            'Администрирование стендов^',
+            'Delivery^',
+            'Разработка Job-ов',
+            'ЕФС',
+            'ППРБ'
+        ],
+        comments: 'Сопровождение Job-ов CI/CD команды. Администрирование стендов DEV/IFT/NT команды по 3м проектам (~50 КТС). Работа с сопровождением ПСИ/ПРОМ.'
+    },
+    {
+        name: '-',
+        level: '7',
+        position: 'Junior+ Java разработчик',
+        city: 'Москва',
+        company: 'Сбер',
+        skills: [
+            'Java',
+            'Gradle',
+            'Maven',
+            'PostgreSQL',
+            'Kubernetes',
+            'Hubernate ORM',
+            'Spring',
+            'Junit',
+            'Mockito',
+            'Docker'
+        ],
+        specs: [
+            'ЕФС BH',
+            'ППРБ',
+            'OSE'
+        ]
+    },
 ];
 
 export default function App() {
+    const Metric = ({label, subLabel}) =>  {
+        return (
+            <Card style={{marginBottom: 5}}>
+                <CardContent>
+                    <Typography gutterBottom variant="h4" component="div">
+                        {label}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {subLabel}
+                    </Typography>
+                </CardContent>
+            </Card>
+        );
+    };
+
     const renderPlayer = (player) => {
         return (
             <Grid item xs={12}>
@@ -183,19 +255,17 @@ export default function App() {
                     <Grid item xs={2}>
                         <Avatar alt="Remy Sharp" src={manpng} sx={{width: 80, height: 80}}/>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={10}>
                         <Typography variant="h6" gutterBottom>
                             {`${player.position}`}
                         </Typography>
                         <Typography variant="subtitle1" gutterBottom>
-                            {`${player.level}, ${player.company}`}
+                            {`${!!player.level ? player.level+', ' : ''} ${player.company}, ${player.city}`}
                         </Typography>
                             {player.specs.map((spec) => {
                                     if (spec.indexOf('^') != -1) {
                                         return (
-                                            <Badge badgeContent={'Lead'} color="primary">
-                                                <Chip label={spec.replaceAll('^','')} color="success" style={{marginRight: 5, marginBottom: 5}}/>
-                                            </Badge>
+                                            <Chip label={spec.replaceAll('^','')} color="primary" style={{marginRight: 5, marginBottom: 5}}/>
                                         );
                                     } else {
                                         return (
@@ -205,7 +275,7 @@ export default function App() {
                                 }
                             )}
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={12}>
                         <Accordion>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -231,18 +301,21 @@ export default function App() {
   return (
     <Container maxWidth="xl" style={{padding: 10}}>
         <Grid container spacing={2}>
-            <Grid item xs={4}>
+            <Grid item xs={2}>
                 <Box flexGrow={1}>
-                    <VisDonut
-                        value={2}
-                        centralLabel="Label"
-                        centralSubLabel="Long sub-label wraps onto the next line"
-                    />
+                    <Metric label={data.length} subLabel={'Членов команды'}/>
+                    <Metric label={'3 года'} subLabel={'Возраст команды'}/>
+                    <Metric label={'5.000'} subLabel={'Всего задач'}/>
                 </Box>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={5}>
                 <Grid container spacing={2}>
-                    {data.map((player) => renderPlayer(player))}
+                    {data.slice(0,4).map((player) => renderPlayer(player))}
+                </Grid>
+            </Grid>
+            <Grid item xs={5}>
+                <Grid container spacing={2}>
+                    {data.slice(4,8).map((player) => renderPlayer(player))}
                 </Grid>
             </Grid>
         </Grid>

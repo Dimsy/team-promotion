@@ -22,12 +22,14 @@ import CardContent from '@mui/material/CardContent';
 import { Button, CardActionArea, CardActions } from '@mui/material';
 
 import manpng from './static/gender-identity.png';
+import {Simulate} from "react-dom/test-utils";
+import play = Simulate.play;
 
 
 const data = [
     {
         name: '-',
-        level: '11 грейд',
+        level: 11,
         position: 'Senior Java разработчик, тех. лид',
         company: 'Сбер',
         city: 'Москва',
@@ -65,7 +67,7 @@ const data = [
     },
     {
         name: '-',
-        level: '10 грейд',
+        level: 10,
         position: 'Senior (low) Главный инженер по тестированию',
         company: 'Сбер',
         city: 'Москва',
@@ -99,7 +101,7 @@ const data = [
     },
     {
         name: '-',
-        level: '',
+        level: 11,
         position: 'Senior Frontend developer, UI/UX лид',
         company: 'Корус',
         city: 'Санкт-Петербург',
@@ -135,7 +137,7 @@ const data = [
     },
     {
         name: '-',
-        level: '',
+        level: 9,
         position: 'Middle Java разработчик',
         city: 'Москва',
         company: 'Корус',
@@ -158,7 +160,7 @@ const data = [
     },
     {
         name: '-',
-        level: '9 грейд',
+        level: 9,
         position: 'Middle(low) Разработчик по тестированию',
         company: 'Сбер',
         city: 'Москва',
@@ -182,7 +184,7 @@ const data = [
     },
     {
         name: '-',
-        level: '9 грейд',
+        level: 9,
         position: 'Инженер IT сопровождения/junior Devops',
         company: 'Сбер',
         city: 'Москва',
@@ -208,7 +210,7 @@ const data = [
     },
     {
         name: '-',
-        level: '7',
+        level: 7,
         position: 'Junior+ Java разработчик',
         city: 'Москва',
         company: 'Сбер',
@@ -230,14 +232,39 @@ const data = [
             'OSE'
         ]
     },
+    {
+        name: '-',
+        level: 11,
+        position: 'Middle+ Системный аналитик',
+        city: 'Москва',
+        company: 'Сбер',
+        skills: [
+            'GIT',
+            'PlantUML (UML)',
+            'BPMN 2.0',
+            'C',
+            'openAPI',
+            'SQL',
+            'PowerShell',
+            'Java'
+        ],
+        specs: [
+            'ЕФС',
+            'ППРБ',
+            'Системная аналитика',
+            'OpenApi'
+        ]
+    },
 ];
+
+data.sort((a,b) => a.level > b.level ? -1 : 1);
 
 export default function App() {
     const Metric = ({label, subLabel}) =>  {
         return (
             <Card style={{marginBottom: 5}}>
                 <CardContent>
-                    <Typography gutterBottom variant="h4" component="div">
+                    <Typography gutterBottom variant="h5" component="div">
                         {label}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -260,16 +287,16 @@ export default function App() {
                             {`${player.position}`}
                         </Typography>
                         <Typography variant="subtitle1" gutterBottom>
-                            {`${!!player.level ? player.level+', ' : ''} ${player.company}, ${player.city}`}
+                            {`${!!player.level && player.company !== 'Корус' ? player.level+', ' : ''} ${player.company}, ${player.city}`}
                         </Typography>
                             {player.specs.map((spec) => {
                                     if (spec.indexOf('^') != -1) {
                                         return (
-                                            <Chip label={spec.replaceAll('^','')} color="primary" style={{marginRight: 5, marginBottom: 5}}/>
+                                            <Chip label={spec.replaceAll('^','')} color="primary" variant="outlined" style={{marginRight: 5, marginBottom: 5}}/>
                                         );
                                     } else {
                                         return (
-                                            <Chip label={spec} color="success" style={{marginRight: 5, marginBottom: 5}}/>
+                                            <Chip label={spec} color="success" variant="outlined" style={{marginRight: 5, marginBottom: 5}}/>
                                         )
                                     }
                                 }

@@ -52,13 +52,15 @@ export const PlayerDescriptionModal = ({isOpened, handleClose, selectedPlayer}) 
                 <Typography variant="body2" gutterBottom>
                     {selectedPlayer.skills.map((skill) => <Chip label={skill} style={{ height: 20, marginRight: 5, marginBottom: 5}}/>)}
                 </Typography>
-                {selectedPlayer.comments &&
+                {selectedPlayer?.comments?.length &&
                   <>
                     <Typography variant="h6" component="h6" style={{marginBottom: 5}}>
                       Comments
                     </Typography>
                     <Typography variant="body1" gutterBottom >
-                        {selectedPlayer.comments}
+                        <ul>
+                            {selectedPlayer.comments.map((c) => <li>{c}</li>)}
+                        </ul>
                     </Typography>
                   </>
                 }

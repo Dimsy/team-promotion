@@ -109,6 +109,7 @@ export default function App() {
                     <Grid sx={{ display: 'flex', flexDirection: { xs: "row", md: "col"}, height: { xs: 100, md: 100 }  }}>
                         <Metric label={sortedData.length} subLabel={'Членов команды'}/>
                         <Metric label={3} subLabel={'Года возраст команды'}/>
+                        <Metric label={3} subLabel={'Системы разработано'}/>
                         <Metric label={5000} subLabel={'Всего задач'}/>
                         <Metric label={2} subLabel={'Пережили ВП'}/>
                     </Grid>

@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import ProTip from './ProTip';
 import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import CardMedia from '@mui/material/CardMedia';
 import Card from '@mui/material/Card';
@@ -17,14 +16,21 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+
+import Paper from '@mui/material/Paper';
 import CardContent from '@mui/material/CardContent';
 import { Button, CardActionArea, CardActions } from '@mui/material';
+import Chart from "react-apexcharts";
 
 import manpng from './static/gender-identity.png';
 import {Simulate} from "react-dom/test-utils";
 import play = Simulate.play;
 import CountUp from "react-countup";
 import {PlayerDescriptionModal} from "./PlayerDescriptionModal";
+import ApexOptions = ApexCharts.ApexOptions;
 
 
 const data = [
@@ -34,7 +40,7 @@ const data = [
         position: 'Senior Java разработчик, тех. лид',
         company: 'Сбер',
         city: 'Москва',
-        type: 'Back',
+        type: 'Backend',
         skills: [
             'k8s',
             'openshift',
@@ -107,7 +113,7 @@ const data = [
         level: 11,
         position: 'Senior Frontend developer, UI/UX лид',
         company: 'Корус',
-        type: 'Front',
+        type: 'Frontend',
         city: 'Санкт-Петербург',
         skills: [
             'JavaScript',
@@ -141,10 +147,45 @@ const data = [
     },
     {
         name: '-',
+        level: 11,
+        position: 'Senior Frontend developer, Release Team лид (ВРИО ВП, STL, ЛАС)',
+        company: 'Сбер',
+        type: 'Team Lead',
+        city: 'Москва',
+        skills: [
+            'JavaScript',
+            'TypeScript',
+            'React',
+            'Redux',
+            'Webpack',
+            'ufs-ui',
+            'v-uik',
+            'MUI',
+            'Node.js',
+            'REST',
+            'OpenApi',
+            'Планирование',
+            'Мониторинг',
+            'Module Federation',
+            'SystemJS',
+            'Playwright',
+            'Jest',
+            'Allure'
+        ],
+        specs: [
+            'Release Team^',
+            'ЕФС PL',
+            'Frontend innersource',
+            'ЕФС',
+            'Монолит',
+        ],
+    },
+    {
+        name: '-',
         level: 9,
         position: 'Middle Java разработчик',
         city: 'Москва',
-        type: 'Back',
+        type: 'Backend',
         company: 'Корус',
         skills: [
             'Java',
@@ -192,7 +233,7 @@ const data = [
         name: '-',
         level: 9,
         position: 'Инженер IT сопровождения/junior Devops',
-        type: 'Devops',
+        type: 'DevOps',
         company: 'Сбер',
         city: 'Москва',
         skills: [
@@ -219,7 +260,7 @@ const data = [
         name: '-',
         level: 7,
         position: 'Junior+ Java разработчик',
-        type: 'Back',
+        type: 'Backend',
         city: 'Москва',
         company: 'Сбер',
         skills: [
@@ -268,44 +309,89 @@ const data = [
 
 data.sort((a,b) => a.level > b.level ? -1 : 1);
 
+
 export default function App() {
-    const [selectedPlayer, setSelectedPlayer] = React.useState(null)
+    const [selectedPlayer, setSelectedPlayer] = React.useState(null);
+    const [selectedSpec, setSelectedSpec] = React.useState(null);
+
+    var chartOptions: ApexOptions = {
+        labels: ['Backend', 'Frontend', 'Analyst', 'QA', 'DevOps'],
+        colors: ['#2e7d32', '#ff1744', '#556cd6', '#19857b', '#ed6c02'],
+        chart: {
+            events: {
+                dataPointSelection: function(event, chartContext, config) {
+                    setSelectedSpec(config.w.config.labels[config.dataPointIndex]);
+                }
+            }
+        },
+        plotOptions: {
+            pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        total: {
+                            show: true,
+                            label: 'Всего',
+                            color: '#373d3f',
+                            formatter: function (w) {
+                                return w.globals.seriesTotals.reduce((a, b) => {
+                                    return a + b
+                                }, 0)
+                            }
+                        }
+                    },
+                }
+            }
+        }
+    };
+
+    const series = [3, 1, 2, 2, 1];
 
     const dropSelectedPlayer = () => setSelectedPlayer(null)
 
 
     const Metric = ({label, subLabel}) =>  {
         return (
-            <Card style={{marginBottom: 5, flex: 1}}>
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        <CountUp start={0} end={label} duration={Math.random() * (5 - 2) + 2} />
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {subLabel}
-                    </Typography>
-                </CardContent>
-            </Card>
+            <Box style={{marginRight: 10}}>
+                <Typography gutterBottom variant="h5" component="div">
+                    <CountUp start={0} end={label} duration={Math.random() * (5 - 2) + 2} />
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {subLabel}
+                </Typography>
+            </Box>
         );
     };
 
-    const renderPlayer = (player) => {
+    const getAvatarColor = (type) => {
+        switch (type) {
+            case 'Backend':
+                return 'success';
+            case 'Analyst':
+                return 'primary';
+            case 'Frontend':
+                return 'error';
+            case 'QA':
+                return 'secondary';
+            case 'DevOps':
+                return 'warning';
+        }
+    };
+
+    const renderPlayer = (player, shadowed) => {
+        // const selected = selectedSpec === player.type || player.type === 'Team Lead' && selectedSpec === 'Frontend';
         return (
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6} style={{ cursor: 'pointer'}} onClick={() => setSelectedPlayer(player)}>
-                <Grid container spacing={2} flexGrow={1}>
-                    <Grid item xs={2} style={{alignItems: 'center', display: 'flex', flexDirection: 'column'}}>
-                        <div><img alt="Remy Sharp" src={manpng} style={{width: '100%', height: '100%'}}/></div>
-                        <Chip label={player.type} color="success" style={{ height: 20, fontSize: 12, marginTop: 5 }}/>
-                    </Grid>
-                    <Grid item xs={9}>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ cursor: 'pointer', opacity: shadowed ? '0.3' : '1'}} onClick={() => setSelectedPlayer(player)}>
+                <Grid container spacing={1} flexGrow={1}>
+                    <Grid item xs={11}>
                         <Typography variant="h6" gutterBottom>
-                            {`${player.position}`}
+                            <Chip label={player.type} color={getAvatarColor(player.type)} style={{ height: 20, fontSize: 12, marginTop: 5 }}/> {`${player.position}`}
                         </Typography>
                         <Typography variant="subtitle1" gutterBottom>
                             {`${!!player.level && player.company !== 'Корус' ? player.level+', ' : ''} ${player.company}, ${player.city}`}
                         </Typography>
                         {player.specs.map((spec) => {
-                            const isLead = spec.includes('^')
+                            const isLead = spec.includes('^');
                             return (
                                 <Chip label={spec.replaceAll('^', '')} color={isLead ? "primary" : "success"}
                                       variant="outlined"
@@ -313,47 +399,47 @@ export default function App() {
                             )
                         })}
                     </Grid>
-                    {/*<Grid item xs={12}>*/}
-                    {/*    <Accordion>*/}
-                    {/*        <AccordionSummary*/}
-                    {/*            expandIcon={<ExpandMoreIcon />}*/}
-                    {/*            aria-controls="panel1a-content"*/}
-                    {/*            id="panel1a-header"*/}
-                    {/*        >*/}
-                    {/*            <Typography>{`Тех. стек (${player.skills.length})`}</Typography>*/}
-                    {/*        </AccordionSummary>*/}
-                    {/*        <AccordionDetails>*/}
-                    {/*            <Typography variant="body2" gutterBottom>*/}
-                    {/*                {player.skills.map((skill) => <Chip label={skill} style={{marginRight: 5, marginBottom: 5}}/>)}*/}
-                    {/*            </Typography>*/}
-                    {/*            <Typography variant="body1" gutterBottom >*/}
-                    {/*                {player.comments}*/}
-                    {/*            </Typography>*/}
-                    {/*        </AccordionDetails>*/}
-                    {/*    </Accordion>*/}
-                    {/*</Grid>*/}
                 </Grid>
             </Grid>
         );
     };
   return (
       <>
-    <Container maxWidth="xl" style={{padding: 10}}>
-        <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={2} lg={2}>
-                <Grid sx={{ display: 'flex', flexDirection: { xs: "row", md: "column"}, height: { xs: 100, md: 400 }  }}>
-                    <Metric label={data.length} subLabel={'Членов команды'}/>
-                    <Metric label={3} subLabel={'Года возраст команды'}/>
-                    <Metric label={5000} subLabel={'Всего задач'}/>
-                    <Metric label={2} subLabel={'ПМ-а пережили'}/>
+        <Container maxWidth="xl" style={{padding: 10}}>
+            <Grid container spacing={2} lg={12}>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+                    <Chart options={chartOptions} series={series} type={'donut'}/>
+                    {/*{selectedSpec && <Box sx={{ '& > :not(style)': { m: 1 } }}>*/}
+                        {/*<Fab variant="extended" size="small" color="primary" aria-label="add" onClick={() => setSelectedSpec(null)}>*/}
+                            {/*Сбросить*/}
+                        {/*</Fab>*/}
+                    {/*</Box>}*/}
+                    <Grid sx={{ display: 'flex', flexDirection: { xs: "row", md: "col"}, height: { xs: 100, md: 100 }  }}>
+                        <Metric label={data.length} subLabel={'Членов команды'}/>
+                        <Metric label={3} subLabel={'Года возраст команды'}/>
+                        <Metric label={5000} subLabel={'Всего задач'}/>
+                        <Metric label={2} subLabel={'Пережили ВП'}/>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12} sm={12} md={5} lg={5}>
+                    {selectedSpec &&
+                        <Grid container item xs={12} sm={12} md={12} lg={12} spacing={1}>
+                            {data.filter((p) => selectedSpec ? selectedSpec === p.type : true).map((player) => [renderPlayer(player, false),
+                                <hr/>])}
+                            {data.filter((p) => selectedSpec ? selectedSpec !== p.type : true).map((player) => [renderPlayer(player, true),
+                                <hr/>])}
+                        </Grid>
+                    }
+                    {!selectedSpec &&
+                    <Grid container item xs={12} sm={12} md={12} lg={12} spacing={1}>
+                        {data.map((player) => [renderPlayer(player, false),
+                            <hr/>])}
+                    </Grid>
+                    }
                 </Grid>
             </Grid>
-            <Grid container item xs={12} sm={12} md={10} lg={10} spacing={2}>
-                {data.map((player) => renderPlayer(player))}
-            </Grid>
-        </Grid>
-    </Container>
-    <PlayerDescriptionModal isOpened={Boolean(selectedPlayer)} handleClose={dropSelectedPlayer} />
+        </Container>
+          {selectedPlayer && <PlayerDescriptionModal isOpened={Boolean(selectedPlayer)} handleClose={dropSelectedPlayer} selectedPlayer={selectedPlayer}/>}
     </>
   );
 }

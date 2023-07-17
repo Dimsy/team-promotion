@@ -5,3 +5,14 @@
     height: 1.2em;
     white-space: nowrap;
 }
+
+@media print {
+    .apexcharts-legend-marker {
+        -webkit-print-color-adjust: exact;
+    }
+
+    .MuiChip-root {
+        -webkit-print-color-adjust: exact;
+    }
+
+}

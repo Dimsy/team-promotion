@@ -6,6 +6,7 @@ export const data = [
     company: 'Сбер',
     city: 'Москва',
     type: 'Backend',
+    invited: true,
     skills: [
       'k8s',
       'openshift',
@@ -45,6 +46,7 @@ export const data = [
     company: 'Сбер',
     city: 'Москва',
     type: 'QA',
+    invited: true,
     skills: [
       'SQL',
       'oracle',
@@ -79,6 +81,7 @@ export const data = [
     position: 'Senior Frontend developer, UI/UX лид',
     company: 'Корус',
     type: 'Frontend',
+    invited: false,
     city: 'Санкт-Петербург',
     skills: [
       'JavaScript',
@@ -116,6 +119,7 @@ export const data = [
     position: 'Senior Frontend developer, Release Team лид (ВРИО ВП, STL, ЛАС)',
     company: 'Сбер',
     type: 'Team Lead',
+    invited: false,
     city: 'Москва',
     skills: [
       'JavaScript',
@@ -158,6 +162,7 @@ export const data = [
     position: 'Middle Java разработчик',
     city: 'Москва',
     type: 'Backend',
+    invited: true,
     company: 'Корус',
     skills: [
       'Java',
@@ -181,6 +186,7 @@ export const data = [
     level: 9,
     position: 'Middle QA Manual, Junior+ Qa Automation',
     company: 'Сбер',
+    invited: true,
     type: 'QA',
     city: 'Москва',
     skills: [
@@ -207,6 +213,7 @@ export const data = [
     position: 'Инженер IT сопровождения/junior Devops',
     type: 'DevOps',
     company: 'Сбер',
+    invited: false,
     city: 'Москва',
     skills: [
       'ЗНОопс',
@@ -233,6 +240,7 @@ export const data = [
     level: 7,
     position: 'Junior+ Java разработчик',
     type: 'Backend',
+    invited: false,
     city: 'Москва',
     company: 'Сбер',
     skills: [
@@ -259,6 +267,7 @@ export const data = [
     position: 'Middle+ Системный аналитик',
     city: 'Москва',
     type: 'Analyst',
+    invited: false,
     company: 'Сбер',
     skills: [
       'GIT',
@@ -284,6 +293,7 @@ export const data = [
     position: 'Middle Системный аналитик',
     city: 'Краснодар',
     type: 'Analyst',
+    invited: false,
     company: 'Корус',
     skills: [
       'Сбор, описание, анализ бизнес требований',
@@ -308,6 +318,7 @@ export const data = [
     level: 9,
     position: 'Junior+ Системный аналитик',
     city: 'Москва',
+    invited: true,
     type: 'Analyst',
     company: 'ООО "ЭйчТуСофт"',
     skills: [

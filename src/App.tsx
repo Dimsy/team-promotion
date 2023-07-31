@@ -22,7 +22,70 @@ export default function App() {
             acc[val.type] = 1
         }
         return acc;
-    }, {})
+    }, {});
+
+    const totalPie = [12,7];
+    const totalPieOptions = {
+        labels: ['Всего', 'Получили приглашение'],
+        dataLabels: {
+            formatter: function (val, opts) {
+                return opts.w.config.series[opts.seriesIndex]
+            },
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 100
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+
+    const progressData = [{
+            name: "Всего",
+            data: [4, 2, 2, 2, 1, 1]
+        }, {
+            name: "Получили приглашение",
+            data: [3, 0, 2, 1, 1, 0]
+        }, {
+            name: "Проведено интервью",
+            data: [1, 0, 1, 1, 0, 0]
+        }];
+
+    const progressOptions  = {
+        plotOptions: {
+            bar: {
+                horizontal: true,
+                dataLabels: {
+                    position: 'top',
+                },
+            }
+        },
+        dataLabels: {
+            enabled: true,
+            offsetX: -6,
+            style: {
+                fontSize: '12px',
+                colors: ['#fff']
+            }
+        },
+        stroke: {
+            show: true,
+            width: 1,
+            colors: ['#fff']
+        },
+        tooltip: {
+            shared: true,
+            intersect: false
+        },
+        xaxis: {
+            categories: ['Бэк', 'Фронт', 'Тестирование', 'Аналитика', 'DevOps', 'Дизайн'],
+        },
+    };
 
     const chartOptions: ApexOptions = {
         labels: Object.keys(dataForGraph),
@@ -121,6 +184,8 @@ export default function App() {
                         <Metric label={2} additionalLabel="-x" subLabel={'ВП пережили '}/>
                     </Grid>
                     <Button onClick={() => onDownloadXLSXReportHandler(sortedData)}>Скачать в Excel</Button>
+                    <Chart options={totalPieOptions} series={totalPie} type={'pie'}/>
+                    <Chart options={progressOptions} series={progressData} type={'bar'}/>
                 </Grid>
                 <Grid item xs={12} sm={12} md={5} lg={5}>
                     {selectedSpec &&
